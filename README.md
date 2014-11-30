@@ -36,3 +36,9 @@ swipeVC.onSwipeViewDidSwipe = { (selectedIndex:Int, selectedViewController:UIVie
   println("changed to \(selectedIndex)")
 }
 ``` 
+
+----------
+License
+-------------
+
+The project is under MIT license, see attached file *license.txt*
