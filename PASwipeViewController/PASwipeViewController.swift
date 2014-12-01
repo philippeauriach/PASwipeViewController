@@ -19,7 +19,19 @@ protocol PASwipeViewControllerDelegate {
 
 class PASwipeViewController: UIViewController, UIScrollViewDelegate {
     
-    var elementsColor = UIColor(red: 0, green: 122/255, blue: 1, alpha: 1)
+    var tintColor:UIColor? {
+        didSet {
+            navbarPageControl.pageIndicatorTintColor = tintColor?.colorWithAlphaComponent(0.4)
+            navbarPageControl.currentPageIndicatorTintColor = tintColor
+            for subview in navbarScrollView.subviews {
+                if let label = subview as? UILabel {
+                    label.textColor = tintColor
+                }
+            }
+            self.navigationItem.leftBarButtonItem?.tintColor = tintColor
+            self.navigationItem.rightBarButtonItem?.tintColor = tintColor
+        }
+    }
     
     var delegate:PASwipeViewControllerDelegate?
     var onSwipeViewDidSwipe:((selectedIndex:Int, selectedViewController:UIViewController) -> Void)?
@@ -34,6 +46,12 @@ class PASwipeViewController: UIViewController, UIScrollViewDelegate {
     
     init(viewControllers: Array<UIViewController>) {
         super.init()
+        
+        if let appearanceTint = UINavigationBar.appearance().tintColor {
+            tintColor = appearanceTint
+        } else {
+            tintColor = UIColor(red: 0, green: 122/255, blue: 1, alpha: 1)
+        }
         
         self.automaticallyAdjustsScrollViewInsets = false
         
@@ -52,8 +70,8 @@ class PASwipeViewController: UIViewController, UIScrollViewDelegate {
         navbarScrollView.showsHorizontalScrollIndicator = false
         navbarScrollView.showsVerticalScrollIndicator = false
         
-        navbarPageControl.pageIndicatorTintColor = elementsColor.colorWithAlphaComponent(0.4)
-        navbarPageControl.currentPageIndicatorTintColor = elementsColor
+        navbarPageControl.pageIndicatorTintColor = tintColor?.colorWithAlphaComponent(0.4)
+        navbarPageControl.currentPageIndicatorTintColor = tintColor
         
         self.viewControllers = viewControllers
     }
@@ -101,7 +119,7 @@ class PASwipeViewController: UIViewController, UIScrollViewDelegate {
             
             var label = UILabel(frame: CGRectMake((navbarScrollView.frame.width/2)*CGFloat(idx), 0, navbarScrollView.frame.width/2, navbarScrollView.frame.height-13))
             label.text = viewController.title
-            label.textColor = elementsColor
+            label.textColor = tintColor
             label.textAlignment = NSTextAlignment.Center
             navbarScrollView.addSubview(label)
             
@@ -154,12 +172,12 @@ class PASwipeViewController: UIViewController, UIScrollViewDelegate {
             }
             self.navigationItem.leftBarButtonItem = nil;
             if let leftButton = leftBarButtonItem(viewControllers[Int(page)]) {
-                leftButton.tintColor = elementsColor.colorWithAlphaComponent(0.0)
+                leftButton.tintColor = tintColor?.colorWithAlphaComponent(0.0)
                 self.navigationItem.leftBarButtonItem = leftButton
             }
             self.navigationItem.rightBarButtonItem = nil;
             if let rightButton = rightBarButtonItem(viewControllers[Int(page)]) {
-                rightButton.tintColor = elementsColor.colorWithAlphaComponent(0.0)
+                rightButton.tintColor = tintColor?.colorWithAlphaComponent(0.0)
                 self.navigationItem.rightBarButtonItem = rightButton
             }
         }

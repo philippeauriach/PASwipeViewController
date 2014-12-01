@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // you can customize the tint of titles and buttons :
+        // UINavigationBar.appearance().tintColor = UIColor.redColor()
         
         var viewControllers = Array<UIViewController>()
         
